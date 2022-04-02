@@ -11,10 +11,14 @@
     height: 40%;
 }
 
-/* #rock-player{
+.pilihanPlayer {
+    cursor: pointer
+}
+
+.pilihan {
     background-color: #C4C4C4;
 }
 
-#result{
+.hasil{
     transform: rotate(-20deg);
-} */
+}
