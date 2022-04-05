@@ -1,33 +1,124 @@
 class Aturan {
+    constructor(elementHasil) {
+        if(this.constructor === Aturan){
+            throw new Error('Tidak Bisa Mengakses Abstract Class')
+        }
 
+        let {vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity} = elementHasil
+
+        this.vs = vs
+        this.hasilPermainan = hasilPermainan
+        this.textHasilPermainan1 = textHasilPermainan1
+        this.textHasilPermainan2 = textHasilPermainan2
+        this.cekOpacity = cekOpacity
+    }
+
+    //Private Method
+    #pilihanPlayer(pp) {
+        return pp.getAttribute('id')
+    }
+
+    //Private Method
+    #pilihanComputer(hasilPC) {
+        //Mencari Pilihan Computer
+        switch(hasilPC){
+            case 1:
+                return 'batu'
+            case 2:
+                return 'kertas'
+            case 3:
+                return 'gunting'
+            default:
+                throw new Error('Pilihan Computer Tidak Valid')
+        }
+    }
+
+    //Private Method
+    #methodHasilPermainan(hasilPP, hasilPC) {
+        if(hasilPP == hasilPC) {
+            this.textHasilPermainan1.style.display = 'none'
+            this.textHasilPermainan2.innerHTML = 'Draw'
+            this.hasilPermainan.classList.remove('bg-opacity-50')
+        } else if(hasilPP == 'batu') {
+            if (hasilPC == 'gunting') {
+                this.textHasilPermainan1.style.display = 'block'
+                this.textHasilPermainan1.innerHTML = 'PLAYER 1' 
+                this.textHasilPermainan2.innerHTML = 'Win'
+
+                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+            } else {
+                this.textHasilPermainan1.style.display = 'block'
+                this.textHasilPermainan1.innerHTML = 'COM'
+                this.textHasilPermainan2.innerHTML = 'Win'
+
+                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+            }
+        } else if(hasilPP == 'gunting') {
+            if (hasilPC == 'batu') {
+                this.textHasilPermainan1.style.display = 'block'
+                this.textHasilPermainan1.innerHTML = 'COM'
+                this.textHasilPermainan2.innerHTML = 'Win'
+
+                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+            } else{
+                this.textHasilPermainan1.style.display = 'block'
+                this.textHasilPermainan1.innerHTML = 'PLAYER 1'
+                this.textHasilPermainan2.innerHTML = 'Win'
+                
+                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+            }
+        } else if(hasilPP == 'kertas') {
+            if (hasilPC == 'batu') {
+                this.textHasilPermainan1.style.display = 'block'
+                this.textHasilPermainan1.innerHTML = 'PLAYER 1'
+                this.textHasilPermainan2.innerHTML = 'Win'
+
+                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+            } else {
+                this.textHasilPermainan1.style.display = 'block'
+                this.textHasilPermainan1.innerHTML = 'COM'
+                this.textHasilPermainan2.innerHTML = 'Win'
+
+                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+            }
+        } else {
+            throw new Error('Hasil Pertandingan Tidak Valid')
+        }
+    }
+
+    //Encapculation (Private Method)
+    finalPilihanPlayer(pp) {
+        return this.#pilihanPlayer(pp)
+    }
+
+    //Encapculation (Private Method)
+    finalPilihanComputer(hasilPC) {
+        return this.#pilihanComputer(hasilPC)
+    }
+
+    //Encapculation (Private Method)
+    finalPermainan(hasilPP, hasilPC){
+        return this.#methodHasilPermainan(hasilPP, hasilPC)
+    }
 }
 
-class MulaiPermainan {
+class MulaiPermainan extends Aturan {
     #stylePilihan = 'pilihan'
     #styleHasil = 'hasil'
     #waktuAnimasiMulai = 100
     #waktuAnimasiSelesai = 1300
-    #hasilPP
 
-    //Menampilkan Hasil Permainan
-    vs = document.getElementById('vs')
-    hasilPermainan = document.getElementById('hasilPermainan')
+    constructor(elementHasil, pilihan, ulang){
+        super(elementHasil)
+        
+        let {pilihanPlayer, pilihanComputer} = pilihan
 
-    //Logika Aturan Permainan
-
-    //Cek Style Selain Draw
-    cekOpacity = hasilPermainan.classList.contains('bg-opacity-50')
-
-    hasil1 = document.querySelector('#hasilPermainan h1:nth-child(1)')
-    hasil2 = document.querySelector('#hasilPermainan h1:nth-child(2)')
-
-    ulang = document.getElementById('ulang')
-
-    constructor(pilihanPlayer, pilihanComputer){
         this.pilihanPlayer = pilihanPlayer
         this.pilihanComputer = pilihanComputer
+        this.ulang = ulang
     }
 
+    //Animasi Acak Pilihan Computer
     #animasiPilihanComputer() {
         let waktu = this.#waktuAnimasiMulai
         for(let i = 0; i < this.pilihanComputer.length; i++){
@@ -44,77 +135,23 @@ class MulaiPermainan {
         }
     }
 
-    #hasilPilihanComputer(hasilPC) {
-        //Mencari Pilihan Computer
-        switch(hasilPC){
-            case 1:
-                return 'batu'
-            case 2:
-                return 'kertas'
-            case 3:
-                return 'gunting'
-            default:
-                throw new Error('Pilihan Computer Tidak Valid')
-        }
-    }
-    
-    #hasilPilihanPlayer(pp) {
-        return pp.getAttribute('id')
+    //Override
+    finalPilihanPlayer(pp){
+        return super.finalPilihanPlayer(pp)
     }
 
-    #hasilPertandingan(hasilPP, hasilPC){
-        if(hasilPP == hasilPC){
-            this.hasil1.style.display = 'none'
-            this.hasil2.innerHTML = 'Draw'
-            this.hasilPermainan.classList.remove('bg-opacity-50')
-        } else if(hasilPP == 'batu') {
-            if (hasilPC == 'gunting') {
-                this.hasil1.style.display = 'block'
-                this.hasil1.innerHTML = 'PLAYER 1' 
-                this.hasil2.innerHTML = 'Win'
-
-                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-            } else {
-                this.hasil1.style.display = 'block'
-                this.hasil1.innerHTML = 'COM'
-                this.hasil2.innerHTML = 'Win'
-
-                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-            }
-        } else if(hasilPP == 'gunting'){
-            if (hasilPC == 'batu') {
-                this.hasil1.style.display = 'block'
-                this.hasil1.innerHTML = 'COM'
-                this.hasil2.innerHTML = 'Win'
-
-                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-            } else{
-                this.hasil1.style.display = 'block'
-                this.hasil1.innerHTML = 'PLAYER 1'
-                this.hasil2.innerHTML = 'Win'
-                
-                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-            }
-        } else if(hasilPP == 'kertas'){
-            if (hasilPC == 'batu') {
-                this.hasil1.style.display = 'block'
-                this.hasil1.innerHTML = 'PLAYER 1'
-                this.hasil2.innerHTML = 'Win'
-
-                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-            } else {
-                this.hasil1.style.display = 'block'
-                this.hasil1.innerHTML = 'COM'
-                this.hasil2.innerHTML = 'Win'
-
-                if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-            }
-        } else {
-            return 'error'
-        }
+    //Override
+    finalPilihanComputer(hasilPC){
+        return super.finalPilihanComputer(hasilPC)
     }
 
-    bertanding() {
+    //Override
+    finalPermainan(hasilPilihanPlayer, hasilPilihanComputer){
+        return super.finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
+    }
+
+    //Proses Mencari Pemenang
+    methodBermain() {
         this.pilihanPlayer.forEach((pp) => {
             pp.addEventListener('click', () => {
                 //Memberi Style Pilihan Player 1
@@ -126,12 +163,13 @@ class MulaiPermainan {
                 //Memberi Animasi Hasil Permainan
                 setTimeout(() => {
                     //Ambil Pilihan Player dan Computer
-                    let hasilPilihanPlayer = this.#hasilPilihanPlayer(pp)
-                    let hasilPC = Math.floor( Math.random() * pilihanComputer.length + 1 )
+                    const hasilPilihanPlayer = this.finalPilihanPlayer(pp)
+                    const hasilPC = Math.floor( Math.random() * pilihanComputer.length + 1 )
                     this.pilihanComputer[hasilPC - 1].classList.add(this.#stylePilihan)
                     
-                    let hasilPilihanComputer = this.#hasilPilihanComputer(hasilPC)
-                    this.#hasilPertandingan(hasilPilihanPlayer, hasilPilihanComputer)
+                    //Mencari Pemenang
+                    const hasilPilihanComputer = this.finalPilihanComputer(hasilPC)
+                    this.finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
 
                     this.vs.style.display = 'none'
                     this.hasilPermainan.style.display = 'block'
@@ -142,7 +180,8 @@ class MulaiPermainan {
         })
     }
 
-    kembali() {
+    //Mengulang Permainan
+    methodUlang() {
         this.ulang.addEventListener('click', () => {
             this.pilihanPlayer.forEach((pp) => {
                 pp.classList.remove(this.#stylePilihan)
@@ -159,10 +198,45 @@ class MulaiPermainan {
     }
 }
 
+//Mengambil Element yang dibutuhkan dalam Instansiasi Class
 const pilihanPlayer = document.querySelectorAll('.pilihanPlayer')
 const pilihanComputer = document.querySelectorAll('.pilihanComputer')
 
-const mulaiPermainan = new MulaiPermainan(pilihanPlayer, pilihanComputer)
+const vs = document.getElementById('vs')
+const hasilPermainan = document.getElementById('hasilPermainan')
 
-mulaiPermainan.bertanding()
-mulaiPermainan.kembali()
+const textHasilPermainan1 = document.querySelector('#hasilPermainan h1:nth-child(1)')
+const textHasilPermainan2 = document.querySelector('#hasilPermainan h1:nth-child(2)')
+
+const cekOpacity = hasilPermainan.classList.contains('bg-opacity-50')
+
+const ulang = document.getElementById('ulang')
+
+//Gagal Mengakses Abstract Class
+
+// const aturan = new Aturan({
+//     vs, 
+//     hasilPermainan, 
+//     textHasilPermainan1, 
+//     textHasilPermainan2, 
+//     cekOpacity
+// })
+
+//Instansiasi MulaiPermainan Class
+const mulaiPermainan = new MulaiPermainan(
+    {
+        vs, 
+        hasilPermainan, 
+        textHasilPermainan1, 
+        textHasilPermainan2, 
+        cekOpacity
+    }, 
+    {
+        pilihanPlayer, 
+        pilihanComputer
+    }, 
+    ulang)
+
+//Memanggil Method dari MulaiPermainan Class
+mulaiPermainan.methodBermain()
+mulaiPermainan.methodUlang()
