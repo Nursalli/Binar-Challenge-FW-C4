@@ -1,20 +1,27 @@
 class Aturan {
+    //Private Variable
+    #sp = 0 //Score Player
+    #sc = 0 //Score Computer
+
     constructor(elementHasil) {
         if(this.constructor === Aturan){
             throw new Error('Tidak Bisa Mengakses Abstract Class')
         }
 
-        let {vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity} = elementHasil
+        let {vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity, scorePlayer, scoreCom} = elementHasil
 
         this.vs = vs
         this.hasilPermainan = hasilPermainan
         this.textHasilPermainan1 = textHasilPermainan1
         this.textHasilPermainan2 = textHasilPermainan2
         this.cekOpacity = cekOpacity
+        this.scorePlayer = scorePlayer
+        this.scoreCom = scoreCom
     }
 
     //Private Method
     #pilihanPlayer(pp) {
+        //Mencari Pilihan Player
         return pp.getAttribute('id')
     }
 
@@ -46,12 +53,14 @@ class Aturan {
                 this.textHasilPermainan2.innerHTML = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+                this.scorePlayer.innerHTML = this.#sp += 1
             } else {
                 this.textHasilPermainan1.style.display = 'block'
                 this.textHasilPermainan1.innerHTML = 'COM'
                 this.textHasilPermainan2.innerHTML = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+                this.scoreCom.innerHTML = this.#sc += 1
             }
         } else if(hasilPP == 'gunting') {
             if (hasilPC == 'batu') {
@@ -60,12 +69,14 @@ class Aturan {
                 this.textHasilPermainan2.innerHTML = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+                this.scoreCom.innerHTML = this.#sc += 1
             } else{
                 this.textHasilPermainan1.style.display = 'block'
                 this.textHasilPermainan1.innerHTML = 'PLAYER 1'
                 this.textHasilPermainan2.innerHTML = 'Win'
                 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+                this.scorePlayer.innerHTML = this.#sp += 1
             }
         } else if(hasilPP == 'kertas') {
             if (hasilPC == 'batu') {
@@ -74,12 +85,14 @@ class Aturan {
                 this.textHasilPermainan2.innerHTML = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+                this.scorePlayer.innerHTML = this.#sp += 1
             } else {
                 this.textHasilPermainan1.style.display = 'block'
                 this.textHasilPermainan1.innerHTML = 'COM'
                 this.textHasilPermainan2.innerHTML = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
+                this.scoreCom.innerHTML = this.#sc += 1
             }
         } else {
             throw new Error('Hasil Pertandingan Tidak Valid')
@@ -102,7 +115,9 @@ class Aturan {
     }
 }
 
+//Inheritance
 class MulaiPermainan extends Aturan {
+    //Private Variable
     #stylePilihan = 'pilihan'
     #styleHasil = 'hasil'
     #waktuAnimasiMulai = 100
@@ -135,6 +150,21 @@ class MulaiPermainan extends Aturan {
         }
     }
 
+    //Kondisi Awal Permainan
+    kondisiAwal() {
+        this.pilihanPlayer.forEach((pp) => {
+            pp.classList.remove(this.#stylePilihan)
+        });
+    
+        this.pilihanComputer.forEach((pc) => {
+            pc.classList.remove(this.#stylePilihan)
+        });
+    
+        this.vs.style.display = 'block'
+        this.hasilPermainan.style.display = 'none'
+        this.hasilPermainan.classList.remove(this.#styleHasil)
+    }
+
     //Override
     finalPilihanPlayer(pp){
         return super.finalPilihanPlayer(pp)
@@ -154,6 +184,8 @@ class MulaiPermainan extends Aturan {
     methodBermain() {
         this.pilihanPlayer.forEach((pp) => {
             pp.addEventListener('click', () => {
+                //Mengembalikan Kondisi Awal Permainan
+                this.kondisiAwal()
                 //Memberi Style Pilihan Player 1
                 pp.classList.add(this.#stylePilihan)
 
@@ -183,17 +215,7 @@ class MulaiPermainan extends Aturan {
     //Mengulang Permainan
     methodUlang() {
         this.ulang.addEventListener('click', () => {
-            this.pilihanPlayer.forEach((pp) => {
-                pp.classList.remove(this.#stylePilihan)
-            });
-        
-            this.pilihanComputer.forEach((pc) => {
-                pc.classList.remove(this.#stylePilihan)
-            });
-        
-            this.vs.style.display = 'block'
-            this.hasilPermainan.style.display = 'none'
-            this.hasilPermainan.classList.remove(this.#styleHasil)
+            this.kondisiAwal()
         })
     }
 }
@@ -209,6 +231,9 @@ const textHasilPermainan1 = document.querySelector('#hasilPermainan h1:nth-child
 const textHasilPermainan2 = document.querySelector('#hasilPermainan h1:nth-child(2)')
 
 const cekOpacity = hasilPermainan.classList.contains('bg-opacity-50')
+
+const scorePlayer = document.getElementById('scorePlayer')
+const scoreCom = document.getElementById('scoreCom')
 
 const ulang = document.getElementById('ulang')
 
@@ -229,7 +254,9 @@ const mulaiPermainan = new MulaiPermainan(
         hasilPermainan, 
         textHasilPermainan1, 
         textHasilPermainan2, 
-        cekOpacity
+        cekOpacity,
+        scorePlayer,
+        scoreCom
     }, 
     {
         pilihanPlayer, 
