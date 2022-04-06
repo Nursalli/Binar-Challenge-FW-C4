@@ -4,11 +4,11 @@ class Aturan {
     #sc = 0 //Score Computer
 
     constructor(elementHasil) {
-        if(this.constructor === Aturan){
+        if(this.constructor === Aturan) {
             throw new Error('Tidak Bisa Mengakses Abstract Class')
         }
 
-        let {vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity, scorePlayer, scoreCom} = elementHasil
+        let { vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity, scorePlayer, scoreCom } = elementHasil
 
         this.vs = vs
         this.hasilPermainan = hasilPermainan
@@ -41,6 +41,7 @@ class Aturan {
     }
 
     //Private Method
+    //Mencari Pemenang
     #methodHasilPermainan(hasilPP, hasilPC) {
         if(hasilPP == hasilPC) {
             this.textHasilPermainan1.style.display = 'none'
@@ -70,7 +71,7 @@ class Aturan {
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
                 this.scoreCom.innerHTML = this.#sc += 1
-            } else{
+            } else {
                 this.textHasilPermainan1.style.display = 'block'
                 this.textHasilPermainan1.innerHTML = 'PLAYER 1'
                 this.textHasilPermainan2.innerHTML = 'Win'
@@ -110,7 +111,7 @@ class Aturan {
     }
 
     //Encapculation (Private Method)
-    finalPermainan(hasilPP, hasilPC){
+    finalPermainan(hasilPP, hasilPC) {
         return this.#methodHasilPermainan(hasilPP, hasilPC)
     }
 }
@@ -123,7 +124,7 @@ class MulaiPermainan extends Aturan {
     #waktuAnimasiMulai = 100
     #waktuAnimasiSelesai = 1300
 
-    constructor(elementHasil, pilihan, ulang){
+    constructor(elementHasil, pilihan, ulang) {
         super(elementHasil)
         
         let {pilihanPlayer, pilihanComputer} = pilihan
@@ -136,12 +137,12 @@ class MulaiPermainan extends Aturan {
     //Animasi Acak Pilihan Computer
     #animasiPilihanComputer() {
         let waktu = this.#waktuAnimasiMulai
-        for(let i = 0; i < this.pilihanComputer.length; i++){
+        for(let i = 0; i < this.pilihanComputer.length; i++) {
             setTimeout(() => {
                 this.pilihanComputer[i].classList.add(this.#stylePilihan)
             }, waktu)
 
-            for(let i = 0; i < this.pilihanComputer.length; i++){
+            for(let i = 0; i < this.pilihanComputer.length; i++) {
                 waktu += 100
                 setTimeout(() => {
                     this.pilihanComputer[i].classList.remove(this.#stylePilihan)
@@ -151,7 +152,7 @@ class MulaiPermainan extends Aturan {
     }
 
     //Kondisi Awal Permainan
-    kondisiAwal() {
+    #kondisiAwal() {
         this.pilihanPlayer.forEach((pp) => {
             pp.classList.remove(this.#stylePilihan)
         });
@@ -166,17 +167,17 @@ class MulaiPermainan extends Aturan {
     }
 
     //Override
-    finalPilihanPlayer(pp){
+    finalPilihanPlayer(pp) {
         return super.finalPilihanPlayer(pp)
     }
 
     //Override
-    finalPilihanComputer(hasilPC){
+    finalPilihanComputer(hasilPC) {
         return super.finalPilihanComputer(hasilPC)
     }
 
     //Override
-    finalPermainan(hasilPilihanPlayer, hasilPilihanComputer){
+    finalPermainan(hasilPilihanPlayer, hasilPilihanComputer) {
         return super.finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
     }
 
@@ -185,7 +186,7 @@ class MulaiPermainan extends Aturan {
         this.pilihanPlayer.forEach((pp) => {
             pp.addEventListener('click', () => {
                 //Mengembalikan Kondisi Awal Permainan
-                this.kondisiAwal()
+                this.#kondisiAwal()
                 //Memberi Style Pilihan Player 1
                 pp.classList.add(this.#stylePilihan)
 
@@ -196,6 +197,7 @@ class MulaiPermainan extends Aturan {
                 setTimeout(() => {
                     //Ambil Pilihan Player dan Computer
                     const hasilPilihanPlayer = this.finalPilihanPlayer(pp)
+                    //Mengambil Angka Acak 1-3
                     const hasilPC = Math.floor( Math.random() * pilihanComputer.length + 1 )
                     this.pilihanComputer[hasilPC - 1].classList.add(this.#stylePilihan)
                     
@@ -214,8 +216,10 @@ class MulaiPermainan extends Aturan {
 
     //Mengulang Permainan
     methodUlang() {
-        this.ulang.addEventListener('click', () => {
-            this.kondisiAwal()
+        this.ulang.addEventListener('click', (event) => {
+            this.#kondisiAwal()
+            //Menghentikan Default Action
+            event.preventDefault()
         })
     }
 }
