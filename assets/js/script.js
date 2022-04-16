@@ -8,7 +8,7 @@ class Aturan {
             throw new Error('Tidak Bisa Mengakses Abstract Class')
         }
 
-        let { vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity, scorePlayer, scoreCom } = elementHasil
+        const { vs, hasilPermainan, textHasilPermainan1, textHasilPermainan2, cekOpacity, scorePlayer, scoreCom } = elementHasil
 
         this.vs = vs
         this.hasilPermainan = hasilPermainan
@@ -29,11 +29,11 @@ class Aturan {
     #pilihanComputer(hasilPC) {
         //Mencari Pilihan Computer
         switch(hasilPC){
-            case 1:
+            case 0:
                 return 'batu'
-            case 2:
+            case 1:
                 return 'kertas'
-            case 3:
+            case 2:
                 return 'gunting'
             default:
                 throw new Error('Pilihan Computer Tidak Valid')
@@ -43,57 +43,86 @@ class Aturan {
     //Private Method
     //Mencari Pemenang
     #methodHasilPermainan(hasilPP, hasilPC) {
-        if(hasilPP == hasilPC) {
+        if(hasilPP === hasilPC) {
             this.textHasilPermainan1.style.display = 'none'
-            this.textHasilPermainan2.innerHTML = 'Draw'
+            this.textHasilPermainan2.innerText = 'Draw'
             this.hasilPermainan.classList.remove('bg-opacity-50')
-        } else if(hasilPP == 'batu') {
-            if (hasilPC == 'gunting') {
+            
+            //Menamplkan Hasil Permainan di Console
+            console.log('Hasil: Draw')
+            console.log(`Keterangan: Tidak ada yang mendapatkan poin, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
+
+        } else if(hasilPP === 'batu') {
+            if (hasilPC === 'gunting') {
                 this.textHasilPermainan1.style.display = 'block'
-                this.textHasilPermainan1.innerHTML = 'PLAYER 1' 
-                this.textHasilPermainan2.innerHTML = 'Win'
+                this.textHasilPermainan1.innerText = 'PLAYER 1' 
+                this.textHasilPermainan2.innerText = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-                this.scorePlayer.innerHTML = this.#sp += 1
+                this.scorePlayer.innerText = this.#sp += 1
+
+                //Menamplkan Hasil Permainan di Console
+                console.log('Hasil: Player 1 Win')
+                console.log(`Keterangan: Player 1 mendapatkan 1 point, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
             } else {
                 this.textHasilPermainan1.style.display = 'block'
-                this.textHasilPermainan1.innerHTML = 'COM'
-                this.textHasilPermainan2.innerHTML = 'Win'
+                this.textHasilPermainan1.innerText = 'COM'
+                this.textHasilPermainan2.innerText = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-                this.scoreCom.innerHTML = this.#sc += 1
+                this.scoreCom.innerText = this.#sc += 1
+
+                //Menamplkan Hasil Permainan di Console
+                console.log('Hasil: Com Win')
+                console.log(`Keterangan: Computer mendapatkan 1 point, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
             }
-        } else if(hasilPP == 'gunting') {
-            if (hasilPC == 'batu') {
+        } else if(hasilPP === 'gunting') {
+            if (hasilPC === 'batu') {
                 this.textHasilPermainan1.style.display = 'block'
-                this.textHasilPermainan1.innerHTML = 'COM'
-                this.textHasilPermainan2.innerHTML = 'Win'
+                this.textHasilPermainan1.innerText = 'COM'
+                this.textHasilPermainan2.innerText = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-                this.scoreCom.innerHTML = this.#sc += 1
+                this.scoreCom.innerText = this.#sc += 1
+
+                //Menamplkan Hasil di Console
+                console.log('Hasil: Com Win')
+                console.log(`Keterangan: Computer mendapatkan 1 point, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
             } else {
                 this.textHasilPermainan1.style.display = 'block'
-                this.textHasilPermainan1.innerHTML = 'PLAYER 1'
-                this.textHasilPermainan2.innerHTML = 'Win'
+                this.textHasilPermainan1.innerText = 'PLAYER 1'
+                this.textHasilPermainan2.innerText = 'Win'
                 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-                this.scorePlayer.innerHTML = this.#sp += 1
+                this.scorePlayer.innerText = this.#sp += 1
+
+                //Menamplkan Hasil Permainan di Console
+                console.log('Hasil: Player 1 Win')
+                console.log(`Keterangan: Player 1 mendapatkan 1 point, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
             }
-        } else if(hasilPP == 'kertas') {
-            if (hasilPC == 'batu') {
+        } else if(hasilPP === 'kertas') {
+            if (hasilPC === 'batu') {
                 this.textHasilPermainan1.style.display = 'block'
-                this.textHasilPermainan1.innerHTML = 'PLAYER 1'
-                this.textHasilPermainan2.innerHTML = 'Win'
+                this.textHasilPermainan1.innerText = 'PLAYER 1'
+                this.textHasilPermainan2.innerText = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-                this.scorePlayer.innerHTML = this.#sp += 1
+                this.scorePlayer.innerText = this.#sp += 1
+
+                //Menamplkan Hasil Permainan di Console
+                console.log('Hasil: Player 1 Win')
+                console.log(`Keterangan: Player 1 mendapatkan 1 point, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
             } else {
                 this.textHasilPermainan1.style.display = 'block'
-                this.textHasilPermainan1.innerHTML = 'COM'
-                this.textHasilPermainan2.innerHTML = 'Win'
+                this.textHasilPermainan1.innerText = 'COM'
+                this.textHasilPermainan2.innerText = 'Win'
 
                 if (!this.cekOpacity) this.hasilPermainan.classList.add('bg-opacity-50')
-                this.scoreCom.innerHTML = this.#sc += 1
+                this.scoreCom.innerText = this.#sc += 1
+
+                //Menamplkan Hasil Permainan di Console
+                console.log('Hasil: Com Win')
+                console.log(`Keterangan: Computer mendapatkan 1 point, Total Score => Player 1: ${this.#sp}, Com: ${this.#sc}`)
             }
         } else {
             throw new Error('Hasil Pertandingan Tidak Valid')
@@ -101,23 +130,23 @@ class Aturan {
     }
 
     //Encapculation (Private Method)
-    finalPilihanPlayer(pp) {
+    _finalPilihanPlayer(pp) {
         return this.#pilihanPlayer(pp)
     }
 
     //Encapculation (Private Method)
-    finalPilihanComputer(hasilPC) {
+    _finalPilihanComputer(hasilPC) {
         return this.#pilihanComputer(hasilPC)
     }
 
     //Encapculation (Private Method)
-    finalPermainan(hasilPP, hasilPC) {
+    _finalPermainan(hasilPP, hasilPC) {
         return this.#methodHasilPermainan(hasilPP, hasilPC)
     }
 }
 
 //Inheritance
-class MulaiPermainan extends Aturan {
+class Permainan extends Aturan {
     //Private Variable
     #stylePilihan = 'pilihan'
     #styleHasil = 'hasil'
@@ -127,7 +156,7 @@ class MulaiPermainan extends Aturan {
     constructor(elementHasil, pilihan, ulang) {
         super(elementHasil)
         
-        let {pilihanPlayer, pilihanComputer} = pilihan
+        const {pilihanPlayer, pilihanComputer} = pilihan
 
         this.pilihanPlayer = pilihanPlayer
         this.pilihanComputer = pilihanComputer
@@ -167,24 +196,28 @@ class MulaiPermainan extends Aturan {
     }
 
     //Override
-    finalPilihanPlayer(pp) {
-        return super.finalPilihanPlayer(pp)
+    _finalPilihanPlayer(pp) {
+        //Menamplkan Hasil Pilihan Player
+        console.log('Pilihan Player 1: ', super._finalPilihanPlayer(pp))
+        return super._finalPilihanPlayer(pp)
     }
 
     //Override
-    finalPilihanComputer(hasilPC) {
-        return super.finalPilihanComputer(hasilPC)
+    _finalPilihanComputer(hasilPC) {
+        //Menamplkan Hasil Pilihan Computer
+        console.log('Pilihan Computer: ', super._finalPilihanComputer(hasilPC))
+        return super._finalPilihanComputer(hasilPC)
     }
 
     //Override
-    finalPermainan(hasilPilihanPlayer, hasilPilihanComputer) {
-        return super.finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
+    _finalPermainan(hasilPilihanPlayer, hasilPilihanComputer) {
+        return super._finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
     }
 
     //Proses Mencari Pemenang
     methodBermain() {
         this.pilihanPlayer.forEach((pp) => {
-            pp.addEventListener('click', () => {
+            pp.addEventListener('click', (event) => {
                 //Mengembalikan Kondisi Awal Permainan
                 this.#kondisiAwal()
                 //Memberi Style Pilihan Player 1
@@ -195,16 +228,17 @@ class MulaiPermainan extends Aturan {
 
                 //Memberi Animasi Hasil Permainan
                 setTimeout(() => {
-                    //Ambil Pilihan Player dan Computer
-                    const hasilPilihanPlayer = this.finalPilihanPlayer(pp)
+                    //Ambil Pilihan Player
+                    const hasilPilihanPlayer = this._finalPilihanPlayer(pp)
                     //Mengambil Angka Acak 1-3
-                    const hasilPC = Math.floor( Math.random() * pilihanComputer.length + 1 )
-                    this.pilihanComputer[hasilPC - 1].classList.add(this.#stylePilihan)
-                    
+                    const hasilPC = Math.floor(Math.random() * pilihanComputer.length)
+                    //Ambil Pilihan Computer
+                    const hasilPilihanComputer = this._finalPilihanComputer(hasilPC)
                     //Mencari Pemenang
-                    const hasilPilihanComputer = this.finalPilihanComputer(hasilPC)
-                    this.finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
+                    this._finalPermainan(hasilPilihanPlayer, hasilPilihanComputer)
 
+                    //Memberikan Style Hasil Final Permainan
+                    this.pilihanComputer[hasilPC].classList.add(this.#stylePilihan)
                     this.vs.style.display = 'none'
                     this.hasilPermainan.style.display = 'block'
                     this.hasilPermainan.classList.add(this.#styleHasil)
@@ -242,17 +276,21 @@ const scoreCom = document.getElementById('scoreCom')
 const ulang = document.getElementById('ulang')
 
 //Gagal Mengakses Abstract Class
-
-// const aturan = new Aturan({
-//     vs, 
-//     hasilPermainan, 
-//     textHasilPermainan1, 
-//     textHasilPermainan2, 
-//     cekOpacity
-// })
+// try{
+//     const aturan = new Aturan({
+//         vs, 
+//         hasilPermainan, 
+//         textHasilPermainan1, 
+//         textHasilPermainan2, 
+//         cekOpacity
+//     })
+// }
+// catch(err){
+//     console.log(err)
+// }
 
 //Instansiasi MulaiPermainan Class
-const mulaiPermainan = new MulaiPermainan(
+const mulaiPermainan = new Permainan(
     {
         vs, 
         hasilPermainan, 
